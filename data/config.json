@@ -1,0 +1,12 @@
+{
+  "shopifyDomain": "tu-tienda.myshopify.com",
+  "shopifyToken": "shpat_xxxxxxxxxxxxxxxxxxxxxx",
+  "defaults": {
+    "dni": "11111111",
+    "peso_gr": 1000,
+    "alto_cm": 1,
+    "ancho_cm": 1,
+    "profundidad_cm": 1,
+    "valor_declarado": 6000
+  }
+}

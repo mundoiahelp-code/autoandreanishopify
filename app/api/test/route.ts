@@ -1,0 +1,5 @@
+import { NextResponse } from 'next/server'; import fs from 'fs'; import path from 'path'; import { fetchPaidUnfulfilled } from '@/lib/shopify'
+export const runtime='nodejs'; export const dynamic='force-dynamic'
+const clean=(d:string)=>d.replace(/^https?:\/\//i,'').replace(/\/+$/,'').trim()
+function load(){ const FILE=path.join(process.cwd(),'data','config.json'); if(fs.existsSync(FILE)) return JSON.parse(fs.readFileSync(FILE,'utf8')); return { shopifyDomain: clean(process.env.SHOPIFY_DOMAIN||''), shopifyToken: process.env.SHOPIFY_TOKEN||'' } }
+export async function GET(){ try{ const cfg=load(); if(!cfg.shopifyDomain||!cfg.shopifyToken) return new NextResponse('Faltan credenciales',{status:400}); const orders=await fetchPaidUnfulfilled({domain:cfg.shopifyDomain,token:cfg.shopifyToken,limit:5}); return NextResponse.json({ok:true,count:orders.length,message:orders.length?'Conexión OK':'Conexión OK — sin pedidos para exportar'}) } catch(e:any){ return new NextResponse(e.message||'Error',{status:400}) } }
